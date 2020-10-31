@@ -13,7 +13,6 @@ class LoggerFile extends Logger implements LoggerInterface
     public function getLoggerSettings(string $type): array
     {
         return array(
-            self::LOGGER_API => array("file" => $this->rootDirectory . "api_call.log"),
             self::LOGGER_DEFAULT => array("file" => $this->rootDirectory . "log.log"),
         )[$type];
     }
@@ -42,10 +41,13 @@ class LoggerFile extends Logger implements LoggerInterface
         fclose($fh);
     }
 
-    public function logApi(string $api, string $rawResult, ?int $error=0, ?int $code=0): void
+    public function logException(Exception $e): void
     {
+        if(in_array($e->getMessage(), $this->excludedExceptions)) {
+            return;
+        }
         $this->createLogDirectory();
-        $this->addLine($this->createLogExceptionLine($api, $rawResult, $error, $code));
+        $this->addLine($this->createLogExceptionLine($e));
     }
 
     public function log(string $message, ?string $type = "message"): void {
@@ -57,7 +59,7 @@ class LoggerFile extends Logger implements LoggerInterface
         return sprintf("[%s][%s]%s", $type, date("Y-m-d H:i:s"), $message);
     }
 
-    private function createLogExceptionLine($api, $rawResult, $error, $code) {
-        return sprintf("[API_CALL][%s]%s (%s:%d)\n%s", date("Y-m-d H:i:s"), $api, $error, $code, $rawResult);
+    private function createLogExceptionLine(Exception $e) {
+        return sprintf("[EXCEPTION][%s]%s(%d)\n%s(%s)\n%s\n\n", date("Y-m-d H:i:s"), $e->getMessage(), $e->getCode(), $e->getFile(), $e->getLine(), $this->formatExceptionTrace($e));
     }
 }

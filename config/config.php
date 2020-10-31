@@ -12,7 +12,6 @@ class Config
     const DB_CONNECTION = "DB_CONNECTION";
     const DB_PORT = "DB_PORT";
     const LOG_DRIVER = "LOG_DRIVER";
-    const STREAM_CHUNK_SIZE = "STREAM_CHUNK_SIZE";
 
     private static $_initialized = false;
     private static $_configArray = array();

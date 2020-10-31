@@ -6,9 +6,11 @@ class ExceptionHandler
     const EXCEPTION_DEFAULT = "default";
 
     private $logger;
+    private $response;
 
-    public function __construct(LoggerInterface $logger) {
+    public function __construct(LoggerInterface $logger, Response $response) {
         $this->logger = $logger;
+        $this->response = $response;
     }
 
     private function getTypeTOHandlerMapping() {
@@ -36,7 +38,8 @@ class ExceptionHandler
     }
 
     private function handleException(Exception $e) {
-        $this->logger->logException($e);
-        Factory::getObject(Factory::TYPE_ROUTER)->redirect(HttpParser::baseUrl() . "views/error.php?error=" . $e->getMessage() . "&code=" . $e->getCode(), $e->getCode());
+        $this->logger->setType(Logger::LOGGER_API)->logException($e);
+        echo $this->response->returnApiException($e->getMessage(), $e->getCode());
+        die();
     }
 }
