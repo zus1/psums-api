@@ -1,0 +1,10 @@
+version: '3'
+services:
+  streams:
+    container_name: psums_api
+    build: .
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - .:/var/www/html
