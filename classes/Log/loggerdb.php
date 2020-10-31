@@ -19,22 +19,27 @@ class LoggerDb extends Logger implements LoggerInterface
         return $settings["model"];
     }
 
-    public function logApi(string $api, string $rawResult, ?int $error=0, ?int $code=0): void
+    public function logException(Exception $e): void
     {
+        if(in_array($e->getMessage(), $this->excludedExceptions)) {
+            return;
+        }
         $model = $this->getModel();
         $model->insert(array(
-            "api" => $api,
-            'raw_result' => $rawResult,
-            'error' => $error,
-            'code' => $code,
+            "type" => "exception",
+            'message' => $e->getMessage(),
+            'code' => ($e->getCode())? $e->getCode() : null,
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+            'trace' => $this->formatExceptionTrace($e)
         ));
     }
 
     public function log(string $message, ?string $type = "message"): void {
         $model = $this->getModel();
         $model->insert(array(
-            "api" => $type,
-            "raw" => $message
+            "type" => $type,
+            "message" => $message
         ));
     }
 }

@@ -9,6 +9,8 @@ class Logger implements LoggerInterface
     protected $type = "log";
     protected $availableTypes = array(self::LOGGER_API);
 
+    protected $excludedExceptions = array("Aggregator on timeout");
+
     public function setType(string $type) {
         if(!in_array($type, $this->availableTypes)) {
             throw new Exception("Logger not supported");
@@ -22,7 +24,7 @@ class Logger implements LoggerInterface
         throw new Exception("If you are here, something is wrong", HttpCodes::INTERNAL_SERVER_ERROR); //needs to be overriden in child class
     }
 
-    public function logApi(string $api, string $rawResult, ?int $error=0, ?int $code=0) : void {
+    public function logException(Exception $e) : void {
         throw new Exception("If you are here, something is wrong", HttpCodes::INTERNAL_SERVER_ERROR); //needs to be overriden in child class
     }
 
