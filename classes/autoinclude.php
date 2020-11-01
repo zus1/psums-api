@@ -24,7 +24,7 @@ abstract class Autoinclude
     private static function getPaths() {
         $root = $_SERVER["DOCUMENT_ROOT"];
         return array(
-            $root . "/classes/log",
+            $root . "/classes/logger",
             $root . "/classes/controllers",
             $root . "/classes",
             $root . "/interface",
