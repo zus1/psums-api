@@ -1,6 +1,17 @@
 <?php
 
+namespace PsumsApi\Classes;
+use Exception;
+use Psums\Classes\Factory;
 
+/**
+ * Class Guardian
+ * @package PsumsApi\Classes
+ *
+ * Class for handling security
+ * At the moment check api key in api requests
+ *
+ */
 class Guardian
 {
     private $request;
@@ -16,6 +27,14 @@ class Guardian
         return Factory::getModel(Factory::MODEL_API_KEYS);
     }
 
+    /**
+     *
+     * Check if api key header exists and validates key
+     * Denies access if key not found or invalid
+     *
+     * @param string $requestUri
+     * @throws Exception
+     */
     public function checkApiKey(string $requestUri) {
         if(in_array($requestUri, $this->apiKeyCheckExcludedRoutes)) {
             return;

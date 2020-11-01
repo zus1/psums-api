@@ -1,5 +1,18 @@
 <?php
 
+namespace PsumsApi\Classes;
+use PDO;
+use PDOException;
+use PsumsApi\Config\Config;
+
+/**
+ * Class Database
+ * @package PsumsApi\Classes
+ *
+ * Class for interacting with database. Uses PDO
+ * https://www.php.net/manual/en/book.pdo.php
+ *
+ */
 class Database
 {
     private $pdo = null;
@@ -14,6 +27,10 @@ class Database
         }
     }
 
+    /**
+     * Initializes connection to mysql database.
+     * Generates PDO object
+     */
     private function initDatabase() {
         $username = Config::get(Config::DB_USERNAME, "");
         $password = Config::get(Config::DB_PASSWORD, "");
@@ -32,6 +49,14 @@ class Database
         }
     }
 
+    /**
+     *
+     * Returns setting from database settings table
+     *
+     * @param string $settingName
+     * @param string|null $default
+     * @return mixed|string|null
+     */
     public function getSetting(string $settingName, ?string $default="") {
         $setting = $this->select("SELECT value FROM settings WHERE name = ?", array("string"), array($settingName));
         if(!$setting) {
@@ -59,12 +84,31 @@ class Database
         }
     }
 
+    /**
+     *
+     * Executes INSERT, UPDATE or DELETE query
+     *
+     * @param $query
+     * @param $types
+     * @param $params
+     * @return mixed
+     */
     public function execute($query, $types, $params) {
         $sth = $this->pdo->prepare($query);
         $this->bindParams($sth, $params, $types);
         return $sth->execute();
     }
 
+    /**
+     *
+     * Executes SELECT query
+     *
+     * @param string $query
+     * @param array|null $types
+     * @param array|null $params
+     * @param bool $assoc
+     * @return mixed
+     */
     public function select(string $query, ?array $types=array(), ?array $params = array(), $assoc = true) {
         $sth = $this->pdo->prepare($query);
         $this->bindParams($sth, $params, $types);

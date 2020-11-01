@@ -1,5 +1,6 @@
 <?php
 
+namespace PsumsApi\Models;
 
 class RulesResultsModel extends Model
 {

@@ -1,6 +1,14 @@
 <?php
 
+namespace PsumsApi\Classes;
 
+/**
+ * Class HttpCodes
+ * @package PsumsApi\Classes
+ *
+ * Library of http codes used in project
+ *
+ */
 class HttpCodes
 {
     const HTTP_ACCEPTED = 202;

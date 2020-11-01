@@ -1,5 +1,14 @@
 <?php
 
+namespace PsumsApi\Classes;
+
+/**
+ * Class HttpParser
+ * @package PsumsApi\Classes
+ *
+ * Class for parsing http sources (like urls)
+ *
+ */
 class HttpParser
 {
     public static function baseUrl() {

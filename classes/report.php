@@ -1,6 +1,15 @@
 <?php
 
+namespace PsumsApi\Classes;
+use Psums\Classes\Factory;
 
+/**
+ * Class Report
+ * @package PsumsApi\Classes
+ *
+ * Class that generates reports for results of applied stream rules on other services
+ *
+ */
 class Report
 {
     private $stream;
@@ -11,6 +20,12 @@ class Report
         $this->rulesResult = $result;
     }
 
+    /**
+     *
+     * Genrates json string of currently available streams
+     *
+     * @return array|mixed
+     */
     public function reportAvailableStreams() {
         $allStreams = $this->stream->getStreamModel()->select(array("stream_id", "name"), array());
         if(!$allStreams) {
@@ -20,6 +35,13 @@ class Report
         return $allStreams;
     }
 
+    /**
+     *
+     * Generates json string containing all available rules for requested stream
+     *
+     * @param string $streamId
+     * @return array
+     */
     public function reportRulesForStream(string $streamId) {
         $report = array(
             'stream_id' => $streamId,
@@ -43,6 +65,17 @@ class Report
         return $report;
     }
 
+    /**
+     *
+     * Generates report for requested stream, second stream that rule is checked in combination with first stream and rule id for rule  to check
+     * If only stream one supplied, will return all available results for that stream
+     * If only stream one and stream two supplied will return all results for those two streams (all available rules)
+     *
+     * @param string $streamIdOne
+     * @param string|null $streamIdTwo
+     * @param int|null $ruleId
+     * @return array
+     */
     public function reportGenerateForStreams(string $streamIdOne, ?string $streamIdTwo="", ?int $ruleId=0) {
         $whereArray = array("first_stream" => $streamIdOne);
         if($streamIdTwo !== "") {
@@ -63,6 +96,10 @@ class Report
         return $report;
     }
 
+    /**
+     * @param string $streamIdOne
+     * @return array
+     */
     private function getBaseReport(string $streamIdOne) {
         return array(
             'stream_id' => $streamIdOne,
@@ -70,6 +107,14 @@ class Report
         );
     }
 
+    /**
+     *
+     * Returns empty array if results field in db is empty
+     * Should not happen, but just in case lets check
+     *
+     * @param array $queryResponse
+     * @return array|mixed
+     */
     private function getResultsFromQueryResponse(array $queryResponse) {
         if(empty($queryResponse["results"])) {
             return array();
@@ -78,6 +123,11 @@ class Report
         return json_decode($queryResponse["results"], true);
     }
 
+    /**
+     * @param array $queryResponse
+     * @param array $queryResults
+     * @return array
+     */
     private function makeReturnReportArray(array $queryResponse, array $queryResults) {
         return array(
             'stream_id' => $queryResponse["second_stream"],

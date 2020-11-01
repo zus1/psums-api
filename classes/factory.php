@@ -1,5 +1,38 @@
 <?php
 
+namespace Psums\Classes;
+
+use PsumsApi\Classes\Controllers\ApiController;
+use PsumsApi\Classes\Controllers\BaseController;
+use PsumsApi\Classes\Database;
+use PsumsApi\Classes\ExceptionHandler;
+use PsumsApi\Classes\Guardian;
+use PsumsApi\Classes\HttpParser;
+use PsumsApi\Classes\Log\LoggerDb;
+use PsumsApi\Classes\Log\LoggerFile;
+use PsumsApi\Classes\Report;
+use PsumsApi\Classes\Request;
+use PsumsApi\Classes\Response;
+use PsumsApi\Classes\Router;
+use PsumsApi\Classes\RulesResult;
+use PsumsApi\Classes\Stream;
+use PsumsApi\Classes\Validator;
+use PsumsApi\Config\Config;
+use PsumsApi\Models\ApiKeysModel;
+use PsumsApi\Models\LoggerApiModel;
+use PsumsApi\Models\LoggerModel;
+use PsumsApi\Models\RulesResultsModel;
+use PsumsApi\Models\StreamInputModel;
+use PsumsApi\Models\StreamModel;
+
+/**
+ * Class Factory
+ * @package PsumsApi\Classes
+ *
+ * Main container for generating object and handling dependency injection.
+ * Can return Objects, Extenders, Models and Libraries
+ *
+ */
 class Factory
 {
     const TYPE_DATABASE = "database";

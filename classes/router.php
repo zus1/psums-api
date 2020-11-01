@@ -1,5 +1,17 @@
 <?php
 
+namespace PsumsApi\Classes;
+use Exception;
+use Psums\Classes\Factory;
+
+/**
+ * Class Router
+ * @package PsumsApi\Classes
+ *
+ * Class that handles incoming http requests and routs them to controllers
+ * Supports GET and POST
+ *
+ */
 class Router
 {
     const REQUEST_POST = 'post';
@@ -23,6 +35,12 @@ class Router
         );
     }
 
+    /**
+     *
+     * Takes input request uri, performs validation and routs it to specified controller
+     *
+     * @throws Exception
+     */
     public function routeApi() {
         $requestUri = explode("?", strtolower($_SERVER["REQUEST_URI"]))[0];
         $requestMethod = strtolower($_SERVER["REQUEST_METHOD"]);
@@ -50,6 +68,17 @@ class Router
         $this->returnResult($result);
     }
 
+    /**
+     *
+     * Validates input request
+     * Checks if method is valid and if method is defined in mapping array
+     *
+     * @param string $requestUri
+     * @param array $routes
+     * @param string $requestMethod
+     * @return mixed
+     * @throws Exception
+     */
     private function validateRequest(string $requestUri, array $routes, string $requestMethod) {
         if(!array_key_exists($requestUri, $routes)) {
             throw new Exception("Unknown endpoint", HttpCodes::HTTP_NOT_FOUND);
@@ -67,17 +96,42 @@ class Router
         return $route;
     }
 
+    /**
+     *
+     * Check if method exists on controller
+     *
+     * @param object $classObject
+     * @param string $classMethod
+     * @throws Exception
+     */
     private function validateClassMethod(object $classObject, string $classMethod) {
         if(!method_exists($classObject, $classMethod)) {
             throw new Exception("Method not found", HttpCodes::INTERNAL_SERVER_ERROR);
         }
     }
 
+    /**
+     *
+     * Returns valid Ok result
+     *
+     * @param string $result
+     */
     private function returnResult(string $result) {
         http_response_code(HttpCodes::HTTP_OK);
         echo $result;
     }
 
+    /**
+     *
+     * Redirects to specified url.
+     * Optionally adds get parameters to url.
+     * If timout added, will delay redirect
+     *
+     * @param string $url
+     * @param int|null $code
+     * @param array|null $data
+     * @param int $timeout
+     */
     public function redirect(string $url, ?int $code=null, ?array $data = array(), $timeout=0) {
         $code = ($code)? $code : HttpCodes::HTTP_OK;
         http_response_code($code);

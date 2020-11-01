@@ -1,6 +1,19 @@
 <?php
 
+namespace PsumsApi\Models;
 
+use Exception;
+use Psums\Classes\Factory;
+use PsumsApi\Classes\Validator;
+
+/**
+ * Class Model
+ * @package PsumsApi\Models
+ *
+ * Model class for interacting with database
+ * Implements base logic, required for child classes to extend it
+ *
+ */
 abstract class Model
 {
     protected $validator;
@@ -13,6 +26,15 @@ abstract class Model
         $this->validator = $validator;
     }
 
+    /**
+     *
+     * $insertData = array(field1 => value1, field2 => value2...)
+     *
+     * @param array $insertData
+     * @param bool|null $lastId
+     * @return int|mixed
+     * @throws Exception
+     */
     public function insert(array $insertData, ?bool $lastId=false) {
         $keys = array_keys($insertData);
         $this->validateDataSet($keys, "insert");
@@ -32,6 +54,16 @@ abstract class Model
         }
     }
 
+    /**
+     *
+     * $fields = array(field1, field2, field3....)
+     * $where = array()|array(field1 => value1, field2 => value2....)
+     *
+     * @param array|null $fields
+     * @param array|null $where
+     * @return mixed
+     * @throws Exception
+     */
     public function select(?array $fields=array(), ?array $where=array()) {
         $this->validateDataSet($fields, "fields");
         $this->validateDataSet(array_keys($where), "where");
@@ -64,6 +96,16 @@ abstract class Model
         return Factory::getObject(Factory::TYPE_DATABASE, true)->select($query, array(), $values);
     }
 
+    /**
+     *
+     * $fields = array(field1 => value1, field2 => value2.....)
+     * $where = array()|array(field1 => value1, field2 => value2....)
+     *
+     * @param array $fields
+     * @param array|null $where
+     * @return mixed
+     * @throws Exception
+     */
     public function update(array $fields, ?array $where) {
         $this->validateDataSet(array_keys($fields), "fields");
         $this->validateDataSet(array_keys($where), "where");
@@ -91,6 +133,15 @@ abstract class Model
         return Factory::getObject(Factory::TYPE_DATABASE, true)->execute($query, array(), $values);
     }
 
+    /**
+     *
+     * Deletes by id or by where arguments
+     * $where = array()|array(field1 => value1, field2 => value2....)
+     *
+     * @param int|null $id
+     * @param array|null $where
+     * @throws Exception
+     */
     public function delete(?int $id=0, ?array $where=array()) {
         $this->validateDataSet(array_keys($where), "where");
         if(empty($where)) {
@@ -111,6 +162,14 @@ abstract class Model
         Factory::getObject(Factory::TYPE_DATABASE, true)->execute($query, array(), $values);
     }
 
+    /**
+     *
+     * check if all supplied fields exists in table data set
+     *
+     * @param array $datasetToValidate
+     * @param $name
+     * @throws Exception
+     */
     private function validateDataSet(array $datasetToValidate, $name) {
         $invalidKeys = array_diff($datasetToValidate, $this->dataSet);
         if(!empty($invalidKeys)) {

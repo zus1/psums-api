@@ -1,6 +1,20 @@
 <?php
 
+namespace PsumsApi\Classes\Controllers;
+use Exception;
+use PsumsApi\Classes\HttpCodes;
+use PsumsApi\Classes\Report;
+use PsumsApi\Classes\Request;
+use PsumsApi\Classes\Response;
+use PsumsApi\Classes\Validator;
 
+/**
+ * Class ApiController
+ * @package PsumsApi\Classes\Controllers
+ *
+ * Front controller for handling api requests
+ *
+ */
 class ApiController
 {
     private $request;
@@ -15,11 +29,24 @@ class ApiController
         $this->report = $report;
     }
 
+    /**
+     *
+     * Inits available streams generate
+     *
+     * @return false|string
+     */
     public function availableStreams() {
         $available = $this->report->reportAvailableStreams();
         return $this->response->returnApiOk(array("available_streams" => $available));
     }
 
+    /**
+     *
+     * Inits available rules generate
+     *
+     * @return false|string
+     * @throws Exception
+     */
     public function availableRulesForStream() {
         $streamId = $this->request->inputOrThrow("stream_id");
         if($this->validator->validate("stream_id", array(Validator::FILTER_ALPHA_NUM))->isFailed()) {
@@ -29,6 +56,13 @@ class ApiController
         return $this->response->returnApiOk($availableRules);
     }
 
+    /**
+     *
+     * Inits report generate
+     *
+     * @return false|string
+     * @throws Exception
+     */
     public function generateReport() {
         $streamIdOne = $this->request->inputOrThrow("stream_one");
         $streamIdTwo = "";
