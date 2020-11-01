@@ -1,7 +1,9 @@
 <?php
 
 namespace PsumsApi\Classes;
+
 use Psums\Classes\Factory;
+use Exception;
 
 /**
  * Class Report
@@ -25,6 +27,7 @@ class Report
      * Genrates json string of currently available streams
      *
      * @return array|mixed
+     * @throws Exception
      */
     public function reportAvailableStreams() {
         $allStreams = $this->stream->getStreamModel()->select(array("stream_id", "name"), array());
@@ -75,6 +78,7 @@ class Report
      * @param string|null $streamIdTwo
      * @param int|null $ruleId
      * @return array
+     * @throws Exception
      */
     public function reportGenerateForStreams(string $streamIdOne, ?string $streamIdTwo="", ?int $ruleId=0) {
         $whereArray = array("first_stream" => $streamIdOne);
