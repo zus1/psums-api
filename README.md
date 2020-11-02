@@ -45,7 +45,7 @@ Key will be provided manually (aka by email)<br><br>
 <b>Following can be requested</b>
 <br><br>
 Endpoint:<br>
-<pre><code>http://localhost/report/available/streams</code></pre>
+<pre><code>http://localhost:8082/report/available/streams</code></pre>
 Response example
 <pre><code>
 {
@@ -73,7 +73,7 @@ This endpoint will return all available streams that can be used in other reques
 No parameters required<br><br>
 
 Endpoint 
-<pre><code>http://localhost/report/stream/available</code></pre>
+<pre><code>http://localhost:8082/report/stream/available</code></pre>
 Parameters
 <pre><code>string stream_id (required)</code></pre>
 Response example
@@ -108,7 +108,7 @@ is applied, in combination with
 <br><br>
 
 Endpoint
-<pre><code>http://localhost//report/stream/report</code></pre>
+<pre><code>http://localhost:8082/report/stream/report</code></pre>
 Parameters
 <pre><code>
 string stream_one (required)
