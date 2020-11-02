@@ -7,8 +7,8 @@ It is composed of 3 services<br><br>
     <li><a href="https://github.com/zus1/psums-api">Api</a></li>
 </ol>
 
-<h3>Installation for sums project</h3>
-Sums can be installed in two different ways
+<h3>Installation for Psums project</h3>
+Psums can be installed in two different ways
 
 First is to pull all three services and put them in same directory (each service in its own directory
 and then all put in same parent directory). Then go to Aggregator directory and run
